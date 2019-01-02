@@ -35,7 +35,7 @@ class AccountEndpointTest extends EndpointTest {
   "GET transactions by id" should "return transactions in which the account was involved" in {
     whenReady(dbInitializer.addTransactions()) { _ =>
       Get("/accounts/1/transactions") ~> route ~> check {
-        val expected = Seq(TransactionEntities.entities.head, TransactionEntities.entities.last).map(tr => toComparableTuple(tr))
+        val expected = Seq(TransactionEntities.entities.head, TransactionEntities.entities.last).map(toComparableTuple)
         responseAs[Seq[Transaction]].map(toComparableTuple) should contain theSameElementsAs expected
       }
     }

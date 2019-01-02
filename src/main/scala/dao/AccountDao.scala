@@ -8,7 +8,7 @@ import slick.lifted.Tag
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class AccountDao(database: Db)(implicit executionContext: ExecutionContext) extends HasTableQuery {
+class AccountDao(database: Db)(implicit ec: ExecutionContext) extends HasTableQuery {
 
   def getAll: Future[Seq[Account]] =
     database.instance.run(accounts.result)

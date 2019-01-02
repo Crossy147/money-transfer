@@ -12,6 +12,6 @@ abstract class EndpointTest
     with GenCodecMarshalling
     with ScalatestRouteTest {
 
-  implicit val exc = ExecutionContext.global
+  override implicit val executor = ExecutionContext.global
   val route: Route
 }

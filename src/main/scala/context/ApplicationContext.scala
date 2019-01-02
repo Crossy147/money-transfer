@@ -5,12 +5,12 @@ import db.Db
 import rest.routes.{AccountsEndpoint, HttpRoute, TransactionsEndpoint}
 import service.{AccountService, TransactionService}
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, ExecutionContextExecutor}
 
 trait ApplicationContext {
   import com.softwaremill.macwire._
 
-  implicit val ec = ExecutionContext.global
+  implicit val executor: ExecutionContextExecutor = ExecutionContext.global
 
   lazy val configPath = "h2InMemory"
   lazy val db: Db = wire[Db]

@@ -8,7 +8,7 @@ import service.TransactionService
 
 import scala.concurrent.ExecutionContext
 
-class TransactionsEndpoint(transactionService: TransactionService)(implicit val ec: ExecutionContext)
+class TransactionsEndpoint(transactionService: TransactionService)(implicit ec: ExecutionContext)
   extends HasRoute with Directives {
 
   override val route: Route = handleExceptions(ApiExceptionHandler.handler) {

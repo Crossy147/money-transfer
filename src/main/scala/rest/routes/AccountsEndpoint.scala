@@ -8,8 +8,7 @@ import service.{AccountService, TransactionService}
 import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success}
 
-class AccountsEndpoint(accountService: AccountService, transactionService: TransactionService)(
-    implicit val ec: ExecutionContext)
+class AccountsEndpoint(accountService: AccountService, transactionService: TransactionService)(implicit  ec: ExecutionContext)
     extends HasRoute
     with Directives {
 

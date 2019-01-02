@@ -4,8 +4,8 @@ import akka.http.scaladsl.model.{HttpEntity, StatusCodes}
 import akka.http.scaladsl.server.Route
 import exceptions.NegativeAccountBalanceException
 import model.dto.AccountCreationDTO
-import model.{Account, AccountId}
-import service.{AccountEntities, BaseTest}
+import model.{Account, AccountId, Transaction}
+import service.{AccountEntities, BaseTest, TransactionEntities}
 
 /**
   * [[BaseTest]] populates account table with entities before each testcase.
@@ -32,9 +32,19 @@ class AccountEndpointTest extends EndpointTest {
     }
   }
 
+  "GET transactions by id" should "return transactions in which the account was involved" in {
+    whenReady(dbInitializer.addTransactions()) { _ =>
+      Get("/accounts/1/transactions") ~> route ~> check {
+        val expected = Seq(TransactionEntities.entities.head, TransactionEntities.entities.last).map(tr => toComparableTuple(tr))
+        responseAs[Seq[Transaction]].map(toComparableTuple) should contain theSameElementsAs expected
+      }
+    }
+  }
+
   "POST" should "create an entity and return its id" in {
     Post("/accounts", AccountCreationDTO(30)) ~> route ~> check {
-      responseAs[AccountId] shouldBe AccountId(AccountEntities.entities.size + 1)
+      val expectedNextId = AccountEntities.entities.size + 1
+      responseAs[AccountId] shouldBe AccountId(expectedNextId)
     }
   }
 

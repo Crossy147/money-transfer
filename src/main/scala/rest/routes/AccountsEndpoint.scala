@@ -3,12 +3,12 @@ import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.{Directives, Route}
 import model.dto.AccountCreationDTO
 import model.{Account, AccountId}
-import service.AccountService
+import service.{AccountService, TransactionService}
 
 import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success}
 
-class AccountsEndpoint(accountService: AccountService)(
+class AccountsEndpoint(accountService: AccountService, transactionService: TransactionService)(
     implicit val ec: ExecutionContext)
     extends HasRoute
     with Directives {
@@ -24,8 +24,8 @@ class AccountsEndpoint(accountService: AccountService)(
           post {
             entity(as[AccountCreationDTO]) { accountDTO =>
               onSuccess(accountService.create(Account.fromDTO(accountDTO))) {
-                transactionId =>
-                  complete(StatusCodes.Created, transactionId)
+                accountId =>
+                  complete(StatusCodes.Created, accountId)
               }
             }
           }
@@ -40,6 +40,15 @@ class AccountsEndpoint(accountService: AccountService)(
                   complete(StatusCodes.NotFound, s"There is no account with id $id")
                 case Failure(ex) =>
                   ApiExceptionHandler.handler(ex)
+              }
+            }
+          } ~ pathSuffix("transactions") {
+            pathEndOrSingleSlash {
+              get {
+                onComplete(transactionService.getForAccount(AccountId(id))) {
+                  transactions =>
+                    complete(StatusCodes.OK, transactions)
+                }
               }
             }
           }

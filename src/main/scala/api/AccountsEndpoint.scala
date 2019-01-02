@@ -1,4 +1,5 @@
-package rest.routes
+package api
+
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.{Directives, Route}
 import model.dto.AccountCreationDTO

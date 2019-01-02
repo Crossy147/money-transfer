@@ -1,4 +1,4 @@
-package rest.routes
+package api
 
 import akka.http.scaladsl.server.{Directives, Route}
 

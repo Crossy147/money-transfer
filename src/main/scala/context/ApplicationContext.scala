@@ -1,8 +1,8 @@
 package context
 
+import api.{AccountsEndpoint, HttpRoute, TransactionsEndpoint}
 import dao.{AccountDao, TransactionDao}
 import db.Db
-import rest.routes.{AccountsEndpoint, HttpRoute, TransactionsEndpoint}
 import service.{AccountService, TransactionService}
 
 import scala.concurrent.{ExecutionContext, ExecutionContextExecutor}

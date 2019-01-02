@@ -2,7 +2,6 @@ package api
 
 import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.testkit.ScalatestRouteTest
-import rest.routes.GenCodecMarshalling
 import service.BaseTest
 
 import scala.concurrent.ExecutionContext

@@ -29,14 +29,12 @@ class TransactionDao(db: Db)(implicit ec: ExecutionContext) extends LazyLogging 
 
   def create(transaction: Transaction): Future[TransactionId] = {
 
-    def transactionIsInvalid(): Unit = {
-      val sourceAccountAndTargetAccountAreTheSame = (tr: Transaction) => tr.from == tr.to
-      val nonPositiveTransactionAmount = (tr: Transaction) => tr.amount <= 0
-
-      if (sourceAccountAndTargetAccountAreTheSame(transaction))
-        throw PrerequisiteException.SameSourceAndTargetAccountException(transaction.from)
-      if (nonPositiveTransactionAmount(transaction))
-        throw PrerequisiteException.NonPositiveAmountException(transaction.amount)
+    def verifyTransaction(): Future[Unit] = {
+      if (transaction.from == transaction.to)
+        Future.failed(PrerequisiteException.SameSourceAndTargetAccountException(transaction.from))
+      else if (transaction.amount <= 0)
+        Future.failed(PrerequisiteException.NonPositiveAmountException(transaction.amount))
+      else Future.unit
     }
 
     def oneBy(fieldGetter: Transaction => AccountId) =
@@ -62,7 +60,7 @@ class TransactionDao(db: Db)(implicit ec: ExecutionContext) extends LazyLogging 
     } yield handler).transactionally
 
     for {
-      _ <- Future(transactionIsInvalid())
+      _ <- verifyTransaction()
       result <- db.instance.run(transferBetweenAccountsAction)
     } yield result
   }

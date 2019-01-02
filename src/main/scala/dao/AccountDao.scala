@@ -17,12 +17,13 @@ class AccountDao(database: Db)(implicit executionContext: ExecutionContext) exte
     database.instance.run(accounts.filter(_.id === accountId).result.headOption)
 
   def create(account: Account): Future[AccountId] = {
-    def validateBalance(): Unit = {
-      if (account.balance < 0) throw new NegativeAccountBalanceException(account.balance)
+    def validateBalance(): Future[Unit] = {
+      if (account.balance < 0) Future.failed(NegativeAccountBalanceException(account.balance))
+      else Future.unit
     }
 
     for {
-      _  <- Future(validateBalance())
+      _  <- validateBalance()
       accountId <- database.instance.run(accounts returning accounts.map(_.id) += account)
     } yield accountId
   }

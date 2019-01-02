@@ -48,10 +48,10 @@ class AccountEndpointTest extends EndpointTest {
     }
   }
 
-  it should "return internal error for an account with negative balance" in {
+  it should s"return ${StatusCodes.BadRequest.intValue} for an account with negative balance" in {
     val negativeBalance = -1
     Post("/accounts", AccountCreationDTO(negativeBalance)) ~> route ~> check {
-      status shouldBe StatusCodes.InternalServerError
+      status shouldBe StatusCodes.BadRequest
       response.entity match {
         case HttpEntity.Strict(_, data)
           if data.utf8String == NegativeAccountBalanceException(negativeBalance).getMessage =>

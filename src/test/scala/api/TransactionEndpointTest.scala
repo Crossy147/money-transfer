@@ -64,7 +64,7 @@ class TransactionEndpointTest extends EndpointTest {
 
   def rejectsWithExceptionMsg(source: Long, target: Long, amount: BigDecimal)(exception: TransactionException): Assertion = {
     Post("/transactions", TransactionCreationDTO(AccountId(source), AccountId(target), amount)) ~> route ~> check {
-      status shouldBe InternalServerError
+      status shouldBe BadRequest
       response.entity match {
         case HttpEntity.Strict(_, data) if data.utf8String == exception.getMessage => succeed
         case _ => fail("Incorrect response")

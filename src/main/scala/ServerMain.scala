@@ -18,7 +18,6 @@ object ServerMain
   implicit val system: ActorSystem = ActorSystem()
   implicit val materializer: ActorMaterializer = ActorMaterializer()
   implicit val executionContext: ExecutionContextExecutor = system.dispatcher
-
   val bindingFuture = {
     logger.info("Creating tables...")
     db.createTables()

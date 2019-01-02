@@ -9,7 +9,7 @@ import service.TransactionService
 import scala.concurrent.ExecutionContext
 
 class TransactionsEndpoint(transactionService: TransactionService)(implicit ec: ExecutionContext)
-  extends HasRoute with Directives {
+    extends HasRoute with Directives {
 
   override val route: Route = handleExceptions(ApiExceptionHandler.handler) {
     pathPrefix("transactions") {
@@ -20,10 +20,8 @@ class TransactionsEndpoint(transactionService: TransactionService)(implicit ec: 
           }
         } ~ post {
           entity(as[TransactionCreationDTO]) { transactionDTO =>
-            onSuccess(
-              transactionService.create(Transaction.fromDto(transactionDTO))) {
-              transactionId =>
-                complete(Created, transactionId)
+            onSuccess(transactionService.create(Transaction.fromDto(transactionDTO))) { transactionId =>
+              complete(Created, transactionId)
             }
           }
         }

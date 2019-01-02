@@ -113,7 +113,7 @@ class TransactionServiceTest extends BaseTest with LazyLogging {
     }
   }
 
-  "get for specified account" should "return transfer for specified account id" in {
+  "get for specified account" should "return transfers for specified account id" in {
     val transactions = Seq(
       Transaction(AccountId(1), AccountId(2), 20),
       Transaction(AccountId(1), AccountId(2), 20),

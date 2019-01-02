@@ -2,7 +2,9 @@ package exceptions
 
 import model.AccountId
 
-sealed abstract class TransactionException(message: String) extends IllegalArgumentException(message)
+sealed abstract class IllegalRestCallArgumentsException(message: String) extends IllegalArgumentException(message)
+
+sealed abstract class TransactionException(message: String) extends IllegalRestCallArgumentsException(message)
 sealed abstract class PrerequisiteException(message: String) extends TransactionException(message)
 object PrerequisiteException {
   case class NonPositiveAmountException(amount: BigDecimal) extends PrerequisiteException(
@@ -25,4 +27,4 @@ object AccountException {
 }
 
 final case class NegativeAccountBalanceException(balance: BigDecimal)
-  extends IllegalArgumentException(s"Account balance must be negative but was ${balance}")
+  extends IllegalRestCallArgumentsException(s"Account balance must be negative but was ${balance}")

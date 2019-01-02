@@ -4,7 +4,7 @@
 Simple money transferring system implementation with exposed REST API, backed by in-memory database.
 
 Technologies used:
-[`Slick`][slick], [`H2`][h2], [`GenCodec`][gencodec], [`ScalaTest`][scalatest]
+[`Slick`][slick], [`H2`][h2], [`GenCodec`][gencodec], [`ScalaTest`][scalatest], [`MacWire`][macwire]
 
 Application is using [`SBT`][sbt]
 
@@ -114,4 +114,5 @@ Account with id 1 does not have enough funds to transfer 10000.00
 [gencodec]: https://github.com/AVSystem/scala-commons/blob/master/docs/GenCodec.md
 [scalatest]: https://github.com/scalatest/scalatest
 [sbt]: https://github.com/sbt/sbt
+[macwire]: https://github.com/adamw/macwire
 

@@ -8,11 +8,12 @@ import model.{Account, AccountId}
   */
 class AccountServiceTest extends BaseTest {
 
-  it should "create an account with non negative balance" in {
-    val initial = Account(100.00, None)
+  it should "create an account with non negative balance and force unified precision" in {
+    val initial = Account(100.123, None)
+    val expectedValueWithPrecision: BigDecimal = 100.12
     whenReady(accountService.create(initial)) { id =>
       whenReady(accountService.get(id)) { account =>
-        account.map(_.balance).value shouldBe initial.balance
+        account.map(_.balance).value shouldBe expectedValueWithPrecision
       }
     }
   }

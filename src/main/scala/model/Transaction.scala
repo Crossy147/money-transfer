@@ -14,9 +14,7 @@ case class Transaction(from: AccountId,
                        to: AccountId,
                        amount: BigDecimal,
                        timestamp: Timestamp = Timestamp.now(),
-                       id: Option[TransactionId] = None) {
-  amount.setScale(2, RoundingMode.HALF_UP)
-}
+                       id: Option[TransactionId] = None)
 
 object Transaction extends HasGenCodec[Transaction] {
   def fromDto(dto: TransactionCreationDTO): Transaction =

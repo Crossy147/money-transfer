@@ -6,7 +6,7 @@ import model.{Account, AccountId}
 import service.AccountService
 
 import scala.concurrent.ExecutionContext
-import scala.util.Success
+import scala.util.{Failure, Success}
 
 class AccountsEndpoint(accountService: AccountService)(
     implicit val ec: ExecutionContext)
@@ -37,8 +37,9 @@ class AccountsEndpoint(accountService: AccountService)(
                 case Success(Some(account)) =>
                   complete(account)
                 case Success(None) =>
-                  complete(StatusCodes.NotFound,
-                           s"There is no account with id $id")
+                  complete(StatusCodes.NotFound, s"There is no account with id $id")
+                case Failure(ex) =>
+                  ApiExceptionHandler.handler(ex)
               }
             }
           }

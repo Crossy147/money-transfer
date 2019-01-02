@@ -20,6 +20,8 @@ object ServerMain
   implicit val executionContext: ExecutionContextExecutor = system.dispatcher
 
   val bindingFuture = {
+    logger.info("Creating tables...")
+    db.createTables()
     logger.info("Starting http endpoints...")
     val mainRoute: Route = httpRoute.route
     val bf = Http().bindAndHandle(mainRoute, httpHost, httpPort)

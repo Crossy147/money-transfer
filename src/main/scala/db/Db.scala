@@ -15,6 +15,9 @@ final class Db(configPath: String) extends HasTableQuery {
   }
   locally {
     instance.createSession()
-    instance.run(DBIO.seq((accounts.schema ++ transactions.schema).create))
   }
+
+  def createTables(): Unit =
+    instance.run(DBIO.seq((accounts.schema ++ transactions.schema).create))
+
 }

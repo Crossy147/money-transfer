@@ -8,7 +8,7 @@ object Dependencies {
     val slickVersion = "3.2.1"
     val configVersion = "1.3.2"
     val scalaLoggingVersion = "3.9.0"
-    val h2DbVersion = "1.4.196"
+    val h2DbVersion = "1.3.176"
     val avsCommonsVersion = "1.34.6"
     val scalaTestVersion = "3.0.5"
     val akkaTestkitVersion = "10.1.5"

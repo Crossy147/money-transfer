@@ -16,17 +16,21 @@ class TransactionServiceTest extends BaseTest with LazyLogging {
   import org.scalatest.concurrent.PatienceConfiguration._
 
   def throwsEx[EXCEPTION <: TransactionException: ClassTag](transaction: Transaction): Assertion =
-    whenReady(transactionService.create(transaction).failed) { ex =>
-      ex shouldBe an[EXCEPTION]
-      whenReady(transactionService.getAll()) { _ shouldBe empty }
-    }
+    whenReady { for {
+        ex <- transactionService.create(transaction).failed
+        all <- transactionService.getAll()
+      } yield {
+        ex shouldBe an[EXCEPTION]
+        all shouldBe empty
+      }
+    }(identity)
 
 
   "create" should "accept money transaction" in {
     val transaction = Transaction(AccountId(1), AccountId(2), 20.00)
     transactionService
       .create(transaction)
-      .map(result => result shouldBe TransactionId(1))
+      .map(_ shouldBe TransactionId(1))
   }
 
   it should "not accept transaction with non-positive amount" in {
@@ -112,19 +116,18 @@ class TransactionServiceTest extends BaseTest with LazyLogging {
       _ should contain theSameElementsAs transactions.map(toComparableTuple)
     }
   }
-
-  "get for specified account" should "return transfers for specified account id" in {
+  "get for specified account" should "return transfer for specified account id" in {
     val transactions = Seq(
       Transaction(AccountId(1), AccountId(2), 20),
-      Transaction(AccountId(1), AccountId(2), 20),
-      Transaction(AccountId(3), AccountId(1), 10),
-      Transaction(AccountId(2), AccountId(3), 10),
+      Transaction(AccountId(3), AccountId(4), 20),
+      Transaction(AccountId(2), AccountId(1), 10),
+      Transaction(AccountId(3), AccountId(4), 10),
     )
-    whenReady(Future.sequence(transactions.map(transactionService.create)), Timeout(Span(3, Seconds)), Interval(Span(100, Millis))) { _ =>
-      whenReady(transactionService.getForAccount(AccountId(1))) {transactions =>
-        transactions.map(toComparableTuple) should contain theSameElementsAs transactions.map(toComparableTuple)
-      }
-    }
-  }
+    whenReady( for {
+      _ <- Future.sequence(transactions.map(transactionService.create))
+      transactions <- transactionService.getForAccount(AccountId(1))
+    } yield {
+      transactions.map(toComparableTuple) should contain theSameElementsAs transactions.map(toComparableTuple)
+    }, Timeout(Span(3, Seconds)), Interval(Span(100, Millis)) )(Future.successful) }
 
 }

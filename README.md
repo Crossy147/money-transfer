@@ -66,14 +66,14 @@ Account balance must be negative but was -20
 
 
 ## ```GET /transactions```
-which return all transactions.
+which returns all transactions.
 
 Sample response:
 ```
 [{"from":0,"to":1,"amount":100.00,"timestamp":"2019-01-02T20:46:15.178Z","id":1},{"from":1,"to":2,"amount":200.00,"timestamp":"2019-01-02T20:46:15.182Z","id":2},{"from":2,"to":3,"amount":300.00,"timestamp":"2019-01-02T20:46:15.182Z","id":3},{"from":3,"to":4,"amount":400.00,"timestamp":"2019-01-02T20:46:15.182Z","id":4}]
 ```
 
-## ```POST /transaction```
+## ```POST /transactions```
 which executes and persists provided transaction.
 
 Sample request:

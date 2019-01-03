@@ -4,7 +4,7 @@
 Simple money transferring system implementation with exposed REST API, backed by in-memory database.
 
 Technologies used:
-[`Slick`][slick], [`H2`][h2], [`GenCodec`][gencodec], [`ScalaTest`][scalatest], [`MacWire`][macwire], ['AkkaHttp`][akkahttp]
+[`Slick`][slick], [`H2`][h2], [`GenCodec`][gencodec], [`ScalaTest`][scalatest], [`MacWire`][macwire], [`AkkaHttp`][akkahttp]
 
 Application is using [`SBT`][sbt]
 

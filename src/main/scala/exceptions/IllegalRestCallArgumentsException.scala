@@ -8,7 +8,7 @@ sealed abstract class TransactionException(message: String) extends IllegalRestC
 sealed abstract class PrerequisiteException(message: String) extends TransactionException(message)
 object PrerequisiteException {
   case class NonPositiveAmountException(amount: BigDecimal) extends PrerequisiteException(
-    s"Transaction amount ${amount} must be positive"
+    s"Transaction amount must be positive, but was ${amount}"
   )
   case class SameSourceAndTargetAccountException(accountId: AccountId) extends PrerequisiteException(
     s"Transaction must be between 2 different account, but is from and to account with id ${accountId}"
@@ -27,4 +27,4 @@ object AccountException {
 }
 
 final case class NegativeAccountBalanceException(balance: BigDecimal)
-  extends IllegalRestCallArgumentsException(s"Account balance must be negative but was ${balance}")
+  extends IllegalRestCallArgumentsException(s"Account balance must not be negative, but was ${balance}")

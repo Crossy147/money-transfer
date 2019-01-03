@@ -18,6 +18,7 @@ class TransactionEndpointTest extends EndpointTest {
   "POST" should "create new transaction and return its id" in {
     Post("/transactions", TransactionCreationDTO(AccountId(1), AccountId(2), 20)) ~> route ~> check {
       responseAs[TransactionId] shouldBe TransactionId(1)
+      response.status shouldBe Created
     }
   }
 
@@ -58,6 +59,7 @@ class TransactionEndpointTest extends EndpointTest {
       Get("/transactions") ~> route ~> check {
         responseAs[Seq[Transaction]].map(transaction => (transaction.from, transaction.to, transaction.amount)) should contain theSameElementsAs
           TransactionEntities.entities.map(tr => (tr.from, tr.to, tr.amount))
+        response.status shouldBe OK
       }
     }
   }

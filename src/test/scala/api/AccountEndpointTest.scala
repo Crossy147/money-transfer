@@ -6,6 +6,7 @@ import exceptions.NegativeAccountBalanceException
 import model.dto.AccountCreationDTO
 import model.{Account, AccountId, Transaction}
 import service.{AccountEntities, BaseTest, TransactionEntities}
+import StatusCodes._
 
 /**
   * [[BaseTest]] populates account table with entities before each testcase.
@@ -17,18 +18,20 @@ class AccountEndpointTest extends EndpointTest {
   "GET" should "return all accounts" in {
     Get("/accounts") ~> route ~> check {
       responseAs[Seq[Account]] should have length AccountEntities.entities.size
+      response.status shouldBe OK
     }
   }
 
   "GET by id" should "return existing entity" in {
     Get("/accounts/2") ~> route ~> check {
       responseAs[Account] shouldBe AccountEntities.entities.tail.head
+      response.status shouldBe OK
     }
   }
 
   "GET by id" should s"return ${StatusCodes.NotFound.intValue} for nonexistent id" in {
     Get("/accounts/123") ~> route ~> check {
-      response.status shouldBe StatusCodes.NotFound
+      response.status shouldBe NotFound
     }
   }
 
@@ -37,6 +40,7 @@ class AccountEndpointTest extends EndpointTest {
       Get("/accounts/1/transactions") ~> route ~> check {
         val expected = Seq(TransactionEntities.entities.head, TransactionEntities.entities.last).map(toComparableTuple)
         responseAs[Seq[Transaction]].map(toComparableTuple) should contain theSameElementsAs expected
+        response.status shouldBe OK
       }
     }
   }
@@ -45,6 +49,7 @@ class AccountEndpointTest extends EndpointTest {
     Post("/accounts", AccountCreationDTO(30)) ~> route ~> check {
       val expectedNextId = AccountEntities.entities.size + 1
       responseAs[AccountId] shouldBe AccountId(expectedNextId)
+      response.status shouldBe Created
     }
   }
 

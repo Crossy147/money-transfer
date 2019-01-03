@@ -4,7 +4,7 @@
 Simple money transferring system implementation with exposed REST API, backed by in-memory database.
 
 Technologies used:
-[`Slick`][slick], [`H2`][h2], [`GenCodec`][gencodec], [`ScalaTest`][scalatest], [`MacWire`][macwire]
+[`Slick`][slick], [`H2`][h2], [`GenCodec`][gencodec], [`ScalaTest`][scalatest], [`MacWire`][macwire], ['AkkaHttp`][akkahttp]
 
 Application is using [`SBT`][sbt]
 
@@ -121,4 +121,5 @@ Account with id 1 does not have enough funds to transfer 10000.00
 [scalatest]: https://github.com/scalatest/scalatest
 [sbt]: https://github.com/sbt/sbt
 [macwire]: https://github.com/adamw/macwire
+[akkahttp]: https://github.com/akka/akka-http
 
